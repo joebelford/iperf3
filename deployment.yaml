@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iperf3
+  labels:
+    app: iperf3
+    app.kubernetes.io/name: iperf3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iperf3
+  template:
+    metadata:
+      labels:
+        app: iperf3
+        app.kubernetes.io/name: iperf3
+    spec:
+      containers:
+        - name: iperf3
+          image: networkstatic/iperf3:latest
+          args:
+            - "-s"
+          ports:
+            - containerPort: 5201
+          resources: {}
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - "ALL"
+            allowPrivilegeEscalation: false
+      # securityContext:
+      #   runAsNonRoot: true
